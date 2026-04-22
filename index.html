@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plum Medicare - Live Agent Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --plum: #a855f7;
+            --text-main: #f1f5f9;
+            --border: #334155;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .rebuttal-sidebar {
+            width: 400px;
+            background-color: #0b0f1a;
+            border-left: 2px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rebuttal-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #1e293b;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .rebuttal-btn:hover { border-color: var(--plum); background: #334155; }
+
+        .rebuttal-display {
+            flex-grow: 1;
+            background: #000;
+            border: 1px solid var(--plum);
+            padding: 15px;
+            border-radius: 10px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        /* Main Feed */
+        .main-container {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .header {
+            border-bottom: 2px solid var(--plum);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            background: var(--bg-dark);
+            z-index: 10;
+        }
+
+        .script-step {
+            margin-bottom: 20px;
+            animation: slideUp 0.4s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+            animation-fill-mode: forwards;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .rep-note {
+            background: #0f172a;
+            border-left: 4px solid var(--plum);
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        
+        .btn-next {
+            background: var(--plum);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-next:disabled {
+            background: #4a4a4a;
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        strong { color: var(--accent); }
+        .timer-label { color: #fbbf24; font-weight: bold; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container" id="script-feed">
+        <div class="header">
+            <h2 style="margin:0; color: var(--plum);">PLUM MEDICARE LIVE FEED</h2>
+        </div>
+
+        <div class="script-step" id="step-1">
+            <div class="card">
+                <p><strong>Agent:</strong> Hi, am I speaking with [Client Name]? <br><br>
+                Hi [Client Name], how are you today? My name is [Agent Name] from <strong>My Senior Health Plan</strong>. I'm following up on your inquiry about Medicare coverage options.</p>
+                <div class="btn-group">
+                    <button class="btn-next" onclick="revealNext('step-1', 'step-2')">CONTINUE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-2" style="display:none;">
+            <div class="card">
+                <p><strong>Agent:</strong> Have you had a chance to review your Medicare coverage this year?</p>
+                <p><i>(Pause for response)</i></p>
+                <p><strong>Agent:</strong> I can connect you with one of our licensed Medicare specialists. They'll review your current coverage, answer your questions, and inform you of any options worth considering. Does that sound good?</p>
+                <div class="btn-group">
+                    <button class="btn-next" onclick="revealNext('step-2', 'step-3')">YES / START TRANSFER</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-3" style="display:none;">
+            <div class="card">
+                <p><strong>Agent:</strong> Great! I’ll connect you now—it’ll just take a moment. Please hold for me.</p>
+                <div class="rep-note">
+                    <strong>LEAD ENDORSEMENT:</strong> Post details to Group Chat:<br>
+                    <code>Client – SF – [URL] – Plum Lead Source – [Client State]</code>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-next" style="background: var(--success);" onclick="revealNext('step-3', 'step-warm')">AGENT JOINED</button>
+                    <button class="btn-next" onclick="revealNext('step-3', 'step-4')">WAIT 60s</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-4" style="display:none;">
+            <div class="card">
+                <span class="timer-label">⏱️ 60 SECOND SPIEL</span>
+                <p><strong>Agent:</strong> Kindly stay with me on the line while waiting for the licensed Medicare agent to take over the call.</p>
+                <div class="rep-note"><strong>FOLLOW-UP:</strong> Request availability update in Group Chat: "This is a follow-up on the previously endorsed lead. It has been 1 minute, and there are currently no available agents. May we kindly request an update on availability?"</div>
+                <div class="btn-group">
+                    <button class="btn-next" style="background: var(--success);" onclick="revealNext('step-4', 'step-warm')">AGENT JOINED</button>
+                    <button class="btn-next" onclick="revealNext('step-4', 'step-5')">WAIT 120s</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-5" style="display:none;">
+            <div class="card">
+                <span class="timer-label">⏱️ 120-180 SECOND SPIEL</span>
+                <p><strong>Agent:</strong> I apologize for the long wait. We are currently waiting for an available licensed Medicare agent. I’m still with you. I want to make sure you are connected to a representative.</p>
+                <div class="rep-note"><strong>FOLLOW-UP:</strong> Send second request in Group Chat: "It has now been 2 minutes, and the lead is still waiting to be assisted. Kindly provide an update at your earliest convenience."</div>
+                <div class="btn-group">
+                    <button class="btn-next" style="background: var(--success);" onclick="revealNext('step-5', 'step-warm')">AGENT JOINED</button>
+                    <button class="btn-next" style="background: var(--danger);" onclick="revealNext('step-5', 'step-cal')">NO AGENT (CALENDLY)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-warm" style="display:none;">
+            <div class="card" style="border: 2px solid var(--success);">
+                <p><strong>WARM TRANSFER:</strong> Hi, I have [Client Name] [Client State]. Go ahead now, Mr./Ms. [US REP].</p>
+                <div class="rep-note">Transfer complete. You may disconnect.</div>
+            </div>
+        </div>
+
+        <div class="script-step" id="step-cal" style="display:none;">
+            <div class="card">
+                <p><strong>Agent:</strong> We will schedule a callback for you, [Client Name], and kindly ask that you keep your phone line available, as we will prioritize reconnecting with you shortly.</p>
+                <div class="rep-note">Book via Calendly website.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rebuttal-sidebar">
+        <h3 style="color: var(--plum); margin: 0 0 15px 0;">PLUM REBUTTALS</h3>
+        <div class="rebuttal-menu">
+            <button class="rebuttal-btn" onclick="setReb('loc')">Where are you located?</button>
+            <button class="rebuttal-btn" onclick="setReb('who')">Who is My Senior Health Plan?</button>
+            <button class="rebuttal-btn" onclick="setReb('email')">Send coverages via email</button>
+            <button class="rebuttal-btn" onclick="setReb('uhc')">Are you with United Health Care?</button>
+            <button class="rebuttal-btn" onclick="setReb('happy')">I'm happy with my plan</button>
+        </div>
+        <div id="reb-box" class="rebuttal-display">
+            Click an objection to see the rebuttal.
+        </div>
+        <button class="rebuttal-btn" style="margin-top: 20px; text-align: center; background: #3b0a0a;" onclick="window.location.reload()">RESET CALL</button>
+    </div>
+
+    <script>
+        function revealNext(currentId, nextId) {
+            const currentStep = document.getElementById(currentId);
+            const btns = currentStep.querySelectorAll('.btn-next');
+            btns.forEach(b => b.disabled = true);
+
+            const nextStep = document.getElementById(nextId);
+            nextStep.style.display = 'block';
+            
+            const feed = document.getElementById('script-feed');
+            setTimeout(() => {
+                feed.scrollTo({ top: feed.scrollHeight, behavior: 'smooth' });
+            }, 100);
+        }
+
+        function setReb(key) {
+            const box = document.getElementById('reb-box');
+            const data = {
+                'loc': "<strong>Rebuttal:</strong> My Senior Health Plan is located in San Diego California.",
+                'who': "<strong>Rebuttal:</strong> Great question. We’re with My Senior Health Plan, a licensed Medicare insurance agency and we are responding to an inquiry you submitted online recently. We represent several Medicare insurance providers to help seniors review their coverage and make sure they're receiving all the benefits they may qualify for.",
+                'email': "<strong>Rebuttal:</strong> We often send our plan comparisons by email so you can review them in detail.",
+                'uhc': "<strong>Rebuttal:</strong> We work with United Healthcare, along with many other carriers. If you are interested in reviewing options with United Healthcare, our licensed representative can review that with you.",
+                'happy': "<strong>Rebuttal:</strong> I totally understand, if you’re already happy with your current plan, that’s a great place to be. Just to be clear, there’s absolutely no need to make any changes today. What our Medicare specialist would do is just quickly walk you through the newest benefits and updates available to you."
+            };
+            box.innerHTML = data[key];
+        }
+    </script>
+</body>
+</html>

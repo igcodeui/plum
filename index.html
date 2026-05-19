@@ -222,6 +222,7 @@
             <button class="rebuttal-btn" onclick="setReb('email')">Send coverages via email</button>
             <button class="rebuttal-btn" onclick="setReb('uhc')">Are you with United Health Care?</button>
             <button class="rebuttal-btn" onclick="setReb('happy')">I'm happy with my plan</button>
+            <button class="rebuttal-btn" onclick="setReb('work')">If Lead said I'm still working, I only have Medicare Part A, and I already have Kaiser.</button>
         </div>
         <div id="reb-box" class="rebuttal-display">
             Click an objection to see the rebuttal.
@@ -252,6 +253,9 @@
                 'email': "<strong>Rebuttal:</strong> We often send our plan comparisons by email so you can review them in detail.",
                 'uhc': "<strong>Rebuttal:</strong> We work with United Healthcare, along with many other carriers. If you are interested in reviewing options with United Healthcare, our licensed representative can review that with you.",
                 'happy': "<strong>Rebuttal:</strong> I totally understand, if you’re already happy with your current plan, that’s a great place to be. Just to be clear, there’s absolutely no need to make any changes today. What our Medicare specialist would do is just quickly walk you through the newest benefits and updates available to you."
+                'work': "<strong>Rebuttal:</strong>I completely understand, and many of the individuals we assist are in the same situation — still actively working and currently covered through an employer-sponsored plan. However, this is actually an ideal time to review your available options as you prepare for Medicare.
+May I connect you now to one of our licensed Medicare agents to review those options?."
+
             };
             box.innerHTML = data[key];
         }

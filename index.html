@@ -217,6 +217,7 @@
     <div class="rebuttal-sidebar">
         <h3 style="color: var(--plum); margin: 0 0 15px 0;">PLUM REBUTTALS</h3>
         <div class="rebuttal-menu">
+            <button class="rebuttal-btn" onclick="setReb('me')">Why are you calling me? What is this call about?</button>
             <button class="rebuttal-btn" onclick="setReb('loc')">Where are you located?</button>
             <button class="rebuttal-btn" onclick="setReb('who')">Who is My Senior Health Plan?</button>
             <button class="rebuttal-btn" onclick="setReb('email')">Send coverages via email</button>
@@ -248,6 +249,7 @@
         function setReb(key) {
             const box = document.getElementById('reb-box');
             const data = {
+                'me': "<strong>Rebuttal:</strong> The reason for our call today is to follow up on your recent internet inquiry regarding Medicare insurance.  We're reaching out to offer you a complimentary plan review to make sure you have the strongest benefits.  May I transfer you now to a benefits specialist who can assist you?",
                 'loc': "<strong>Rebuttal:</strong> My Senior Health Plan is located in San Diego California.",
                 'who': "<strong>Rebuttal:</strong> Great question. We’re with My Senior Health Plan, a licensed Medicare insurance agency and we are responding to an inquiry you submitted online recently. We represent several Medicare insurance providers to help seniors review their coverage and make sure they're receiving all the benefits they may qualify for.",
                 'email': "<strong>Rebuttal:</strong> We often send our plan comparisons by email so you can review them in detail.",
